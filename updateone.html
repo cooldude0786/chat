@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat Application</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300&family=Rubik+Moonrocks&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+	<script> 
+	var name = prompt("Please enter your name");
+	while(name ==''){name = prompt("Please enter your name");}
+	var Channel="Message";
+	// var name = "khizar"
+</script>
+	<script src="https://kit.fontawesome.com/c153436894.js" crossorigin="anonymous"></script>
+	<style>
+		.textbox{
+			bottom: 0;
+		}
+		.boxheigth{
+			height: calc(100vh - 129px);
+		}
+		.rounded {
+		    border-radius: 0.5rem!important;
+		}
+		.container {background-color:  azure!important}
+		ul li{
+			width:fit-content;
+			max-width: 70%;
+		}
+		ul{list-style-type: none;}
+		.bgcolor{
+			font-family: 'Kalam', cursive;
+		    border-top-right-radius: 1.25rem!important;
+		    border-top-left-radius: 1.25rem!important;
+		    padding: 13px 0;
+		}
+		hr {
+		    margin-top: 1rem;
+		    margin-bottom: 1rem;
+		    border: 0;
+		    border-top: 3px solid rgba(0,0,0,.1);
+		}
+		.bg-info {color: white}
+		.bgcol{background-color: paleturquoise;}
+		.bgd2d{background-color: black; color: wheat;}
+		.br{border-bottom-right-radius: 1.25rem!important;}
+		.bl{border-bottom-left-radius: 1.25rem!important;}
+		.jointtxt{font-size: 10px; background-color: darkgrey;}
+		.rounded {border-radius: 0.25rem!important;}
+		.contact{font-size: 26px;font-family: 'Rubik Moonrocks', cursive;}
+		::-webkit-scrollbar {
+		  width: 5px;
+		}
+		/* Track */
+		::-webkit-scrollbar-track {
+		  box-shadow: inset 0 0 5px grey; 
+		  border-radius: 100px;
+		}
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+		  background: red; 
+		  border-radius: 100px;
+		}
+		/* Handle on hover */
+		::-webkit-scrollbar-thumb:hover {
+		  width: 10px;
+		}
+		@media screen and (max-width:530px){
+			.boxheigth{
+				height: calc(100vh - 196px)
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="display-4 text-center">Welcome To Live Chat <span id="DisplayName"> </span></div>
+<div class="d-flex boxheigth">
+	<div class="container w-75 px-0 rounded d-flex">
+		<div class="w-25 pb-2 pt-2 px-2 Contacts">
+			<div class="h-100 p-1 overflow-auto" style=" background-color: #F8F9B8!important">
+			<div class="">
+			 	<div class="px-1 contact" >
+			 		Contacts
+			 	</div>
+			</div>
+			<hr>
+			<div>
+
+				<ul class="pl-0" id="Contact_list">
+				    <li><button class="btn btn-outline-info border-0" onclick="ChangeScreen(0)" type="button">Khizar</button></li>
+				    <li><button class="btn btn-outline-info border-0" onclick="ChangeScreen(1)" type="button">Test1</button></li>
+				    <li><button class="btn btn-outline-info border-0" onclick="ChangeScreen(2)" type="button">Test2</button></li>
+				</ul>
+			</div>
+			</div>
+		</div>
+		<div class="w-100 overflow-auto" id="chat-board">
+			<ul class="ul p-0 m-0 " id="GroupChatScreen">
+<li class="p-2 ml-auto"><div class="bgcolor px-2 bgcol bl">hi</div></li>
+<li class="p-2 bgcol bgcolor px-2 br"><div class="bgcolor px-2 bgcol bl">hiu</div></li>
+			</ul>
+			</div>
+	</div>
+</div>
+<div class="form-group col-md-12 justify-content-center position-fixed textbox">
+	<form class="col-md-8 mr-auto ml-auto d-flex" action="">
+	<!-- 	<button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false">
+			hoi
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+ --><div class="input-group">
+  <div class="col-md-10 input-group-prepend pr-0">
+<div class="btn-group dropup">
+  <button type="button" class="btn btn-secondary dropdown-toggle" id="sendto" data-toggle="dropdown" aria-expanded="false">Everyone</button>
+  <div class="dropdown-menu" id="dropdown-menu">
+    <button class="dropdown-item" type="button" onclick="sendToUser(this.innerText)">Everyone</button>
+  </div>
+</div>
+		<input type="text" class="form-control rounded-0" name="message-input" autocomplete="off">
+  </div>
+ 	<input type="submit" class="btn btn-outline-primary pl-2 col-md-2" name="">
+	</form>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- <script src="/public/js/bk.js"></script> -->
+<script>
+	function sendToUser(val){
+	 	document.getElementById('sendto').innerText = val;
+	 	// console.log(Channel)
+	}
+	// let scriptBK = script
+	// scriptBK.scr = /js/bk.js
+	// d.h.append(scriptBK)
+</script>
+<script>	
+	function ChangeScreen() {
+	var board = document.getElementById('chat-board'),Contact_list = document.getElementById("Contact_list")
+  	var Screens = board.querySelectorAll("ul"),ContactListLi = Contact_list.querySelectorAll('button')
+  	Screens[0].innerHTML = "";
+	for(i=0;i<ContactListLi.length;i++){
+		if(i==arguments[0]){
+			console.log("The person name is ",arguments[1])
+			ContactListLi[i].classList.remove("btn-outline-info")
+			ContactListLi[i].classList.add("bg-info")
+			if (arguments[0]==0) {
+			}
+			if(arguments[1]=="Group Chat"){
+				document.getElementById('sendto').classList.remove("d-none")
+				document.getElementById('sendto').classList.add("d-block")
+				Channel = "Message"
+			}
+			else{
+			document.getElementById('sendto').classList.add("d-none")
+			document.getElementById('sendto').classList.remove("d-block")
+				Channel = arguments[1];
+				}
+			}
+		else{
+			ContactListLi[i].classList.add("btn-outline-info")
+			ContactListLi[i].classList.remove("bg-info")
+		}
+	}
+	(Channel != "Message")?document.getElementById("ul"+Channel).classList.remove("d-none"):document.getElementById("GroupChatScreen").classList.remove("d-none")
+}
+</script>
+<script>
+	// let scriptbk = document.createElement("script")
+
+		var a = document.querySelector("span")
+	a.innerHTML = name
+
+  // Import the functions you need from the SDKs you need
+  var { initializeApp } = require("https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js")
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+	const firebaseConfig = {
+	    apiKey: "AIzaSyArozbdTXvE48PJJ6vmfvlJhYw8piGasUU",
+	    authDomain: "chat-io-3de79.firebaseapp.com",
+	    databaseURL: "https://chat-io-3de79-default-rtdb.asia-southeast1.firebasedatabase.app",
+	    projectId: "chat-io-3de79",
+	    storageBucket: "chat-io-3de79.appspot.com",
+	    messagingSenderId: "404478950204",
+	    appId: "1:404478950204:web:c1f29fa040abc669d7fc39"
+	  };
+
+	  // Initialize Firebase
+	  const app = initializeApp(firebaseConfig);
+	  var {getDatabase, ref, set, child, update, remove}
+	  = require("https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js")
+	  const db = getDatabase();
+	  var user="User"+name
+	function InsertUserEntry(){
+	  	set(ref(db,"User/JoinedUser--"+name+Date().substr(0,25)),{
+	  		UserName:name,
+	  		JoiningTime : Date()
+	  	})
+	  	.then(()=>{console.log("name register");})
+	  	.catch((error)=>{console.log(error)})
+	  }
+InsertUserEntry()
+
+function InsertUserChats(){
+	  set(ref(db,"Chat/"+name+"Chats/SendTime"+Date().slice(16,-31)),{
+	  		Time : Date().slice(16,-31),
+	  		message : arguments[0],
+	  		To : arguments[1]
+	  	})
+	  	.then(()=>{console.log("name register");})
+	  	.catch((error)=>{console.log(error)})}
+
+
+	// console.log(name)
+ 	const form = document.querySelector("form");
+	const input = document.querySelector("input");
+  	var messageList = document.getElementById("GroupChatScreen");
+ 	const socket = io();
+  	var board = document.getElementById('chat-board')
+  	var Screens = board.querySelectorAll("ul")
+ // socket.emit('message', ['new','joining',name]);
+ socket.emit('joining msg', [false,name]);
+	// InsertUserEntry()
+
+ var FinalMessage,content;
+ form.addEventListener("submit", function(e){
+ 	e.preventDefault();
+ 	if(input.value == ''){return}
+ 	var receiver = document.getElementById('sendto').innerText,obj={Type:"Message",Name:name ,Message: input.value ,Receiver: receiver, medium: Channel };
+ 	// console.log("Sending the message =>",{Type:"Message",Name:name ,Message: input.value ,Receiver: receiver, medium: Channel })
+ 	var ex="Message"
+ 	if(Channel!=ex){
+ 		obj={Type:"E2E", Receiver: Channel ,Sender: name ,message: input.value}
+ 		socket.emit("E2E",obj )
+ 		console.log("Sending the message "+{Type:"E2E", Receiver: Channel ,Sender: name ,message: input.value})
+ 		var a = document.getElementById("GroupChatScreen")
+ 		console.log(a)
+ 		const li = document.createElement("li");
+ 		li.classList.add('p-2','ml-auto');
+		content ='<div class="bgcolor px-2 bgcol bl">'+input.value+'</div>';
+		li.innerHTML = content
+		a.append(li)
+		Screens.scrollTop = board.scrollHeight
+
+ 	}
+ 	else
+ 		socket.emit("message",obj);
+ 	input.value = '';
+ 	sendToUser("Everyone");
+ });
+function addMessageToHTML(message) {
+  	console.log(message)
+  	
+  	// console.log("medium",Channel)
+  	const li = document.createElement("li");
+  	// if(message.medium == name){
+  	// 	console.log('end to end done')
+  	// }
+	if(message.Type=="E2E"){
+		console.log("enter E2E")
+		const li = document.createElement('li');
+		li.classList.add('p-2');
+		var a = document.getElementById("GroupChatScreen")
+		if(message.Receiver == name){
+			console.log("Enter into receiver ")
+			li.classList.add('bgcol')
+			li.classList.add('bgcolor','px-2','br')
+			content ='<div class="bgcolor px-2 bgcol bl">'+message.message+'</div>';
+		}else{
+			li.classList.add('p-2','ml-auto');
+			content ='messageasxasxasde';
+		}
+		li.innerHTML = content
+		// console.log(message_list)
+		if(a.append(li)){console.log("done appendng")}
+	}
+  	if(message.Type=="Message"){
+  		console.log(message)
+
+		if(message.Name == name){
+			li.classList.add('p-2','ml-auto');
+			(message.Receiver != "Everyone" )?content = '<div class="bgcolor px-2 bgd2d bl">'+message.Message+'</div>':content ='<div class="bgcolor px-2 bgcol bl">'+message.Message+'</div>';
+		}else{
+				if(message.Receiver!="Everyone"){
+			  		if (message.Receiver != name){
+				  		return
+			  		}
+			  	}
+			(message.Receiver == name)?li.classList.add('bgd2d'):li.classList.add('bgcol')
+			li.classList.add('bgcolor','px-2','br')
+			content = message.Name+' : '+message.Message
+		}
+	  	li.innerHTML += content;
+  	}
+  		if(message.Type == "Joining"){
+  		// console.log("pass joinnig if block")
+  		li.classList.add('ml-auto','mr-auto','py-2')
+  		li.style.textAlign = "center"
+  		// li.innerText = message[1]+""+message[2]+""+message[3]
+  			li.innerHTML ='<div class="px-2 jointtxt rounded">'+message.Message+'</div>'
+  				socket.on("UserLoggIn",(msg)=>{
+
+  				var contact_content = '<li><button class="btn btn-outline-info border-0 pr-1 pl-1" onclick="ChangeScreen(0,this.innerText)" type="button">Group Chat</button></li>'
+  				var content = '<button class="dropdown-item" type="button" onclick="sendToUser(this.innerText)">Everyone</button>';
+  				var i = 1;
+  				msg.forEach((item)=>{
+  				if(item == name)
+  					 { return; }
+  				content += '<button class="dropdown-item" type="button" onclick="sendToUser(this.innerText)">'+item+'</button>'
+  				contact_content += '<li><button class="btn btn-outline-info border-0" onclick="GetData('+i+',this.innerText)" type="button">'+item+'</button></li>'
+  				i = i + 1;
+  				if(board.getElementsByClassName(item).length !=1 )
+  					{
+  						board.innerHTML += '<ul class="d-none ul p-0 m-0 '+item+'" id="ul'+item+'"><li class="ml-auto mr-auto py-2" style="text-align: center;"></li></ul>'
+  					}
+  				else{
+  					 return ;
+  					}
+  			})
+
+
+
+
+
+
+  			document.getElementById("dropdown-menu").innerHTML = content;
+  			document.getElementById("Contact_list").innerHTML = contact_content
+
+  		});
+  		// console.log(message)
+  	}
+  	// console.log("sender name "+message[0]+" receiver name :"+name)
+			  	board.children[0].append(li)
+  	board.scrollTop = board.scrollHeight
+  }
+
+function GetData(){
+	console.log("getting the data boss")
+}
+
+socket.on("UserLoggIn",(msg1)=>{
+	// console.log("Active people",msg1)
+	document.getElementById("dropdown-menu").innerHTML += '<button class="dropdown-item" type="button" onclick="sendToUser(this.innerText)">'+msg1[ [msg1.length - 1] ]+'</button>'})
+
+socket.on("message", addMessageToHTML);
+
+socket.on(name, addMessageToHTML);
+
+socket.on("dis",(msg)=>{
+ 	socket.emit("peoplename",name)
+ 	console.log(msg)})
+socket.on("")
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+            $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</body>
+</html> 
+<!-- 78.85 -->
